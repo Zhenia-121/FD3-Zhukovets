@@ -1,0 +1,21 @@
+td,  th, .products {
+    border-collapse: collapse; /*убираем пустые промежутки между ячейками*/
+    border: 1px solid grey; /*устанавливаем для таблицы внешнюю границу серого цвета толщиной 1px*/
+}
+.productImg {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    height: 120px; 
+}
+td {
+    width: 120px;
+    text-align: center
+}
+.tableContainer {
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+    text-align: center
+}

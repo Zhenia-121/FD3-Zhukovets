@@ -1,0 +1,39 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+  <meta charset="utf-8" />
+  <title>I-Shop</title>
+</head> 
+<body> 
+  <!-- <input type="button" onclick="changeQuestionText()" value="изменить текст вопроса"> -->
+  <div id="container" class="tableContainer"></div> 
+      
+  <script src="https://unpkg.com/react@15/dist/react.js"></script> 
+  <script src="https://unpkg.com/react-dom@15/dist/react-dom.js"></script> 
+      
+  <script src="ProductsTable.js"></script>
+  <link rel="stylesheet" type="text/css" href="ProductsTable.css" />
+
+  <script>
+    var questionText='Как вы относитесь к программированию?';
+    function buildProductsTable() {
+      var storeName = "Organic Shop"
+      var products=[ 
+        {name:'tomato',price:1.4,url:'https://s1.1zoom.ru/prev/378/377881.jpg',count:200}, 
+        {name:'cucumbers',price:1.5,url:'http://demcatechnologies.ca/wp-content/uploads/2016/02/project1-640x400.jpg',count:300},
+        {name:'grapes',price:2.4,url:'https://www.buenasalud.net/wp-content/uploads/2015/02/Jugo-de-uva-propiedades.jpg',count:35},
+        {name:'meat',price:8.3,url:'https://tasty-food.info/sites/default/files/48722871.jpg',count:10},
+        {name:'milk',price:0.8,url:'https://bowlofherbs.com/wp-content/uploads/2018/02/soy-milk-600x400.jpg',count:100},
+      ];
+  
+      ReactDOM.render(
+        React.createElement(ProductsTable,{storeName:storeName,products:products}), 
+        document.getElementById('container') 
+      );
+      
+    }
+    buildProductsTable();
+  </script>
+
+</body> 
+</html>
