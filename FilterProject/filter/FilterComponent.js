@@ -4,25 +4,33 @@ var FilterComponent = React.createClass({
     },
     getInitialState: function() {
         return { 
-          filteredStrings: new Array(...this.props.strings)  
+          filteredStrings: new Array(...this.props.strings),
+          filterString: '' 
         } 
     },
-    filterStrings: function(isSorting, filterStr) {
-      var newFilteredArray = this.props.strings.filter((el) => {
+    changeStrings(isSorting, filterStr) {
+      var newFilteredArray = [];
+      if (filterStr != this.state.filterStr || !isSorting) {
+        newFilteredArray = this.props.strings.filter((el) => {
           if (el.includes(filterStr)) {
             return el;
           }
-      });
-      if (isSorting) newFilteredArray.sort();
+        });
+        // для случая сортировки - сортируем, для случая изменения строки фильтрации - меняем текущую строку-фильтр
+        if (isSorting) {
+          newFilteredArray.sort();
+        }
+        if(filterStr != this.state.filterStr)
+          this.setState({filterString: filterStr});
+      }
+      if (filterStr == this.state.filterStr && isSorting) {
+        newFilteredArray = this.state.filteredStrings.sort();
+      } 
       this.setState({filteredStrings: newFilteredArray});
     },
-    sortStrings: function(isSorting, filterStr) {
-        if (isSorting) {
-          var sortArray = this.state.filteredStrings.sort();
-          this.setState({filteredStrings: sortArray});
-        } else {
-          this.filterStrings(false, filterStr);
-        }
+    changeHandler(EO) {
+        console.log('event:\n' + EO.target.value.split('\n'));
+        this.setState({filteredStrings:EO.target.value.split('\n')});
     },
     reset: function() {
       this.setState({
@@ -31,8 +39,8 @@ var FilterComponent = React.createClass({
     },
     render: function() {
         return React.DOM.div({className: 'FilterComponent'}, 
-        React.createElement(FilterBox, { cbChangeSearchString: this.filterStrings, cbSetSort: this.sortStrings, cbReset: this.reset}), 
-        React.DOM.textarea({cols:35,rows:10, value:this.state.filteredStrings.join('\n')})
+        React.createElement(FilterBox, {cbChangeSearchString:this.changeStrings,cbSetSort:this.changeStrings,cbReset:this.reset}), 
+        React.DOM.textarea({cols:35,rows:10,value:this.state.filteredStrings.join('\n'), onChange:this.changeHandler})
         )
     }
 })

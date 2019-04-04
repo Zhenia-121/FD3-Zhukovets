@@ -11,7 +11,6 @@ var FilterBox = React.createClass({
         }
     },
     changeSearchString: function (EO) {
-        console.log(EO.target.value);
         this.props.cbChangeSearchString(this.state.isSorting, EO.target.value);
         this.setState({searchString: EO.target.value})
     },
@@ -27,8 +26,8 @@ var FilterBox = React.createClass({
     render: function() {
         return React.DOM.div(
             {className: 'FilterBox'},
-            React.DOM.input({type:'checkbox',defaultChecked:false,checked:this.state.isSorting,onChange: this.setSorting}),
-            React.DOM.input({type:'text', value: this.state.searchString, onChange:this.changeSearchString}),
+            React.DOM.input({type:'checkbox',checked:this.state.isSorting,onChange: this.setSorting}),
+            React.DOM.input({type:'text',value: this.state.searchString,onChange:this.changeSearchString}),
             React.DOM.input({type:'button', value:'Reset', onClick: this.reset}))
     }
 })
