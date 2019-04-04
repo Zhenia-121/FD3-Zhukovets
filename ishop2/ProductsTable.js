@@ -5,7 +5,8 @@ var ProductsTable = React.createClass( {
     },
     getInitialState: function() {
       return { 
-        selected: null
+        selected: null,
+        products: new Array(...this.props.products)
       };
     },
     clickRow: function(name) {
@@ -13,12 +14,12 @@ var ProductsTable = React.createClass( {
     },
     deleteProduct: function(productName) {
       if (confirm('Are yo really want to delete this product')) {
-          var ind = this.props.products.findIndex(p => p.name == productName);
-          this.props.products.splice(ind, 1);
+          var ind = this.state.products.findIndex(p => p.name == productName);
+          this.setState((currState, props) => ({products: new Array(...this.state.products.slice(0, ind),...this.state.products.slice(ind+1,))}));
       }
     },
     render: function () {
-        var productsInTable=this.props.products.map( p =>
+        var productsInTable=this.state.products.map( p =>
             React.createElement(Product, { key:p.name,
               name: p.name,
               count: p.count,
