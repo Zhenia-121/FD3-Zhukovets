@@ -4,29 +4,20 @@ var FilterComponent = React.createClass({
     },
     getInitialState: function() {
         return { 
-          filteredStrings: new Array(...this.props.strings),
-          filterString: '' 
+          filteredStrings: this.props.strings.slice(),
+          filterString: ''
         } 
     },
     changeStrings(isSorting, filterStr) {
-      var newFilteredArray = [];
-      if (filterStr != this.state.filterStr || !isSorting) {
-        newFilteredArray = this.props.strings.filter((el) => {
-          if (el.includes(filterStr)) {
-            return el;
-          }
-        });
-        // для случая сортировки - сортируем, для случая изменения строки фильтрации - меняем текущую строку-фильтр
-        if (isSorting) {
-          newFilteredArray.sort();
-        }
-        if(filterStr != this.state.filterStr)
-          this.setState({filterString: filterStr});
+      let newArray = [];
+      if (filterStr)  
+        newArray = this.props.strings.filter((el) => el.includes(filterStr))
+      else 
+        newArray = this.props.strings.slice();
+      if (isSorting) {
+        newArray.sort();
       }
-      if (filterStr == this.state.filterStr && isSorting) {
-        newFilteredArray = this.state.filteredStrings.sort();
-      } 
-      this.setState({filteredStrings: newFilteredArray});
+      this.setState({filterString: filterStr, filteredStrings: newArray});
     },
     changeHandler(EO) {
         console.log('event:\n' + EO.target.value.split('\n'));
@@ -34,7 +25,7 @@ var FilterComponent = React.createClass({
     },
     reset: function() {
       this.setState({
-        filteredStrings: new Array(...this.props.strings)
+        filteredStrings: this.props.strings.slice()
       });
     },
     render: function() {

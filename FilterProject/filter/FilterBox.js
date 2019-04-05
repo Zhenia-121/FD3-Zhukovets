@@ -11,13 +11,12 @@ var FilterBox = React.createClass({
         }
     },
     changeSearchString: function (EO) {
+        this.setState({searchString: EO.target.value}); 
         this.props.cbChangeSearchString(this.state.isSorting, EO.target.value);
-        this.setState({searchString: EO.target.value})
     },
     setSorting: function(EO) {
-        this.props.cbSetSort(!this.state.isSorting, this.state.searchString);
-        console.log(!this.state.isSorting);
-        this.setState({isSorting:!this.state.isSorting});
+        this.setState({isSorting:EO.target.checked});
+        this.props.cbSetSort(EO.target.checked, this.state.searchString);
     },
     reset: function() {
         this.props.cbReset();
