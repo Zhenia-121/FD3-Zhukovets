@@ -4,8 +4,7 @@ var FilterComponent = React.createClass({
     },
     getInitialState: function() {
         return { 
-          filteredStrings: this.props.strings.slice(),
-          filterString: ''
+          filteredStrings: this.props.strings.slice()
         } 
     },
     changeStrings(isSorting, filterStr) {
@@ -17,11 +16,7 @@ var FilterComponent = React.createClass({
       if (isSorting) {
         newArray.sort();
       }
-      this.setState({filterString: filterStr, filteredStrings: newArray});
-    },
-    changeHandler(EO) {
-        console.log('event:\n' + EO.target.value.split('\n'));
-        this.setState({filteredStrings:EO.target.value.split('\n')});
+      this.setState({filteredStrings: newArray});
     },
     reset: function() {
       this.setState({
@@ -31,7 +26,7 @@ var FilterComponent = React.createClass({
     render: function() {
         return React.DOM.div({className: 'FilterComponent'}, 
         React.createElement(FilterBox, {cbChangeSearchString:this.changeStrings,cbSetSort:this.changeStrings,cbReset:this.reset}), 
-        React.DOM.textarea({cols:35,rows:10,value:this.state.filteredStrings.join('\n'), onChange:this.changeHandler})
+        React.DOM.textarea({cols:35,rows:10,value:this.state.filteredStrings.join('\n'), readOnly:true})
         )
     }
 })

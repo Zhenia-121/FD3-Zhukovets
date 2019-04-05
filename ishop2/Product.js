@@ -1,21 +1,22 @@
 var Product = React.createClass({
     propTypes: {
+        id: React.PropTypes.number.isRequired,
         name: React.PropTypes.string.isRequired,
         price: React.PropTypes.number.isRequired,
         url: React.PropTypes.string.isRequired,
         count: React.PropTypes.number.isRequired,
-        selected: React.PropTypes.string,
+        selected: React.PropTypes.number,
         cbDelete: React.PropTypes.func.isRequired,
         cbClick: React.PropTypes.func.isRequired
     },
     deleteRow() {
-        this.props.cbDelete(this.props.name);
+        this.props.cbDelete(this.props.id);
     },
     selectProduct() {
-        this.props.cbClick(this.props.name);
+        this.props.cbClick(this.props.id);
     },
     render: function() {
-        return React.DOM.tr({key:this.props.name,className:(this.props.selected==this.props.name)?'selected':null, onClick:this.selectProduct},
+        return React.DOM.tr({key:this.props.id,className:(this.props.selected==this.props.id)?'selected':null, onClick:this.selectProduct},
             React.DOM.td(null,this.props.name),
             React.DOM.td(null,this.props.count),
             React.DOM.td(null,this.props.price),

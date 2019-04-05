@@ -9,19 +9,20 @@ var ProductsTable = React.createClass( {
         products: this.props.products.slice()
       };
     },
-    clickRow: function(name) {
-        this.setState({selected: name});
+    clickRow: function(productId) {
+        this.setState({selected: productId});
     },
-    deleteProduct: function(productName) {
+    deleteProduct: function(productId) {
       if (confirm('Are yo really want to delete this product')) {
           this.setState((currState, props) => ({
-            products: currState.products.filter(p => p.name != productName)
+            products: currState.products.filter(p => p.id != productId)
           }));
       }
     },
     render: function () {
         var productsInTable=this.state.products.map( p =>
-            React.createElement(Product, { key:p.name,
+            React.createElement(Product, { key:p.id,
+              id: p.id,
               name: p.name,
               count: p.count,
               price: p.price,
