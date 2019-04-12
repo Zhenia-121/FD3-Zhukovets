@@ -11,10 +11,15 @@ class Product extends React.Component{
         count: PropTypes.number.isRequired,
         selected: PropTypes.number,
         cbDelete: PropTypes.func.isRequired,
-        cbClick: PropTypes.func.isRequired
+        cbClick: PropTypes.func.isRequired,
+        cbEdit: PropTypes.func.isRequired
     }
-    deleteRow = () => {
+    deleteProduct = () => {
         this.props.cbDelete(this.props.id);
+    }
+    editProduct = (EO) => {
+        EO.stopPropagation();
+        this.props.cbEdit(this.props.id);
     }
     selectProduct = () => {
         this.props.cbClick(this.props.id);
@@ -29,10 +34,12 @@ class Product extends React.Component{
                     <td>{this.props.count}</td>
                     <td>{this.props.price}</td>
                     <td>
-                        <img className='productImg' src={this.props.url}></img> 
+                        {/* <img className='productImg' src={this.props.url}></img>  */}
+                        {this.props.url}
                     </td>
                     <td>
-                        <input type='button' value='Delete' onClick={this.deleteRow}/>
+                        <input type='button' value='Edit' onClick={this.editProduct}/>
+                        <input type='button' value='Delete' onClick={this.deleteProduct}/>
                     </td>
                 </tr>
             )

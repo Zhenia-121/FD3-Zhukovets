@@ -19,3 +19,11 @@ td {
     padding: 10px;
     text-align: center
 }
+
+.NewProduct, .EditCard, .ViewCard {
+    margin-top: 20px;
+}
+.NewProductBtn {
+    margin-top: 20px;
+    float: left;
+}
