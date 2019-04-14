@@ -14,7 +14,8 @@ class Product extends React.Component{
         cbClick: PropTypes.func.isRequired,
         cbEdit: PropTypes.func.isRequired
     }
-    deleteProduct = () => {
+    deleteProduct = (EO) => {
+        EO.stopPropagation();
         this.props.cbDelete(this.props.id);
     }
     editProduct = (EO) => {

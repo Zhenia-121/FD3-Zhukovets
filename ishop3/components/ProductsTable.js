@@ -13,49 +13,48 @@ class ProductsTable extends React.Component {
   state = {
     mode: null,
     selected: null,
-    selectedProduct: null,
     products: this.props.products.slice()
   }  
   clickProduct = (productId) => {
     this.setState(
       { 
         mode: 'view',
-        selected: productId,
-        selectedProduct: this.props.products.find(p => p.id === productId) 
+        selected: productId
       });
   }
   editProduct = (productId) => {
     console.log(productId);
     this.setState({ 
         mode: 'edit',
-        selected: productId,
-        selectedProduct: this.props.products.find(p => p.id === productId)
+        selected: productId
       }
     );
   }
-  saveProduct(savingProduct, id) {
-      if (!id) {
-        // находим максимальный id продуктов и уыеличиваем на единицу
-        let id = this.state.products.reduce((a, b) => (a.id > b.id ? a.id : b.id)) + 1;
-        console.log(id);
-        savingProduct.id = id;
-        console.log(savingProduct);
+  saveProduct = (savingProduct) => {
+      if (!savingProduct.id) {
+        // находим максимальный id продуктов и увеличиваем на единицу
+        let newId = this.state.products.reduce((a, b) => (a.id > b.id ? a.id : b.id)) + 1;
+        savingProduct.id = newId;
         this.setState((currState, props) => ({
-           products: currState.products.push(savingProduct)
+          mode: null,
+          selected: null,
+          products: [...currState.products, savingProduct]
         }));
       }
       else {
-        ind = this.state.products.findIndex(p => p.id === id);
         this.setState((currState, props) => ({
-          products: currState.products.splice(index, 1, savingProduct)
+          mode: null,
+          selected: null,
+          products: currState.products.map(p => {
+            return (p.id !== savingProduct.id) ? p: savingProduct; 
+          })
        }));
       }       
   }
   createProduct = () => {
     this.setState({
       mode: 'create',
-      selected : 0,
-      selectedProduct: {}
+      selected : 0
     });
   }
   deleteProduct = (productId) => {
@@ -65,13 +64,14 @@ class ProductsTable extends React.Component {
       }));
     }
   }
-  cancel() {
+  cancel = () => {
     this.setState({
-      mode: null
+      mode: null,
+      selected: null
     })
   }
   render() {
-    var productsInTable = this.state.products.map(p =>
+    let productsInTable = this.state.products.map(p =>
       <Product
         key={p.id}
         id={p.id}
@@ -84,7 +84,11 @@ class ProductsTable extends React.Component {
         cbDelete={this.deleteProduct}
         cbEdit={this.editProduct}
       />);
+      let selectedProduct = {};
+      if (this.state.selected)
+        selectedProduct = this.state.products.find(p => p.id === this.state.selected);
     return (
+      <div>
       <div className='ProductsTable'>
         <h2>{this.props.storeName}</h2>
         <table className='products'>
@@ -102,6 +106,7 @@ class ProductsTable extends React.Component {
             {productsInTable}
           </tbody>
         </table>
+      </div> 
       <div className="NewProduct">
           <div className="NewProductBtn"> 
           {
@@ -112,24 +117,24 @@ class ProductsTable extends React.Component {
       </div>
       <div className="ViewCard">
         {
-          (this.state.selected && this.state.mode === 'view') && 
+          (this.state.mode === 'view' && this.state.selected ) && 
               <ProductCard
-                product={this.state.selectedProduct} 
+                product={selectedProduct} 
             />
         }
       </div>
-      <div className="EditCard">
+      <div key={this.state.selected} className="EditCard">
       {
           (this.state.mode === 'edit' || this.state.mode === 'create') &&
           <EditProductForm
-              product={this.state.selectedProduct}
+              product={selectedProduct}
               mode = {this.state.mode}
               cbSave = {this.saveProduct}
               cbCancel = {this.cancel}
           />
         }
       </div>
-      </div>
+      </div> 
     );
   }
 }
