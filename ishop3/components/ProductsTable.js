@@ -13,7 +13,8 @@ class ProductsTable extends React.Component {
   state = {
     mode: null,
     selected: null,
-    products: this.props.products.slice()
+    products: this.props.products.slice(),
+    isAvailable: true
   }  
   clickProduct = (productId) => {
     this.setState(
@@ -64,11 +65,18 @@ class ProductsTable extends React.Component {
       }));
     }
   }
+  // запрещаем просмотр и изменение продуктов - в текущий момент продукт selected уже редактируется
+  cardChanged = () => {
+    this.setState({
+      isAvailable: false
+    });
+  }
   cancel = () => {
     this.setState({
       mode: null,
-      selected: null
-    })
+      selected: null,
+      isAvailable: true
+    });
   }
   render() {
     let productsInTable = this.state.products.map(p =>
@@ -79,6 +87,7 @@ class ProductsTable extends React.Component {
         count={p.count}
         price={p.price}
         url={p.url}
+        canActions={this.state.isAvailable}
         selected={this.state.selected}
         cbClick={this.clickProduct}
         cbDelete={this.deleteProduct}
@@ -131,6 +140,7 @@ class ProductsTable extends React.Component {
               mode = {this.state.mode}
               cbSave = {this.saveProduct}
               cbCancel = {this.cancel}
+              cbChanged = {this.cardChanged}
           />
         }
       </div>

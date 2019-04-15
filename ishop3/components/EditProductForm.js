@@ -13,7 +13,8 @@ class EditProductForm extends React.Component {
         }),
         mode: PropTypes.string.isRequired,
         cbSave: PropTypes.func.isRequired,
-        cbCancel: PropTypes.func.isRequired
+        cbCancel: PropTypes.func.isRequired,
+        cbChanged: PropTypes.func.isRequired
     }
     errorMessages = {
         textInput: "Please, fill the field",
@@ -25,49 +26,40 @@ class EditProductForm extends React.Component {
             name: this.props.product.name,
             count: this.props.product.count,
             price: this.props.product.price,
+            url: this.props.product.url,
             validateObject: {
                 url: this.validateTextInput(this.props.product.url),
                 name: this.validateTextInput(this.props.product.name),
                 count: this.validateNumberInput(this.props.product.count),
                 price: this.validateNumberInput(this.props.product.price),
-            }
+            },
+            isChanged: false
         }
     };
     validateTextInput = (text) => { return text && text.length > 1; }
     validateNumberInput = (number) => { return number && number > 0; }
+    validateAll = () => {
+        let isValid = true;
+        Object.keys(this.state.validateObject).forEach(key => {
+            isValid &= this.state.validateObject[key];
+        });
+        return isValid;
+    }
     changeInput = (EO) => {
-        var value = EO.target.value;
+        let value = EO.target.value;
         let inputName = EO.target.name;
         if (EO.target.type === 'number')
             value = +value;
         this.setState({
-            [inputName]: value
+            [inputName]: value,
+            isChanged: true
         })
+        // даем знать родительскому компоненту о том, что карточка была изменена
+        // вызывается только один раз - при первом изменении 
+        if (!this.state.isChanged)
+            this.props.cbChanged();
     }
-    changeName = (EO) => {
-        let value = EO.target.value;
-        console.log(EO.target.type);
-        this.setState({
-            name:value
-        });
-    }
-    changePrice = (EO) => {
-        this.setState({
-            price:+EO.target.value
-        });
-    }
-    changeCount = (EO) => {
-        this.setState({
-            count:+EO.target.value
-        });
-    }
-    changeUrl = (EO) => {
-        this.setState({
-            url:EO.target.value
-        });
-    }
-    saveProduct = (EO) => {
-        // EO.stopPropagation();
+    saveProduct = () => {
         this.props.cbSave({id: this.props.product.id, ...this.state});
     }
     cancel = () => {
@@ -107,26 +99,26 @@ class EditProductForm extends React.Component {
                     }
                     <div>
                         <label>Name:</label>
-                        <input type="text" name="name" required value={this.state.name || ''} onChange={this.changeName} onBlur={this.blurHandler}/>
+                        <input type="text" name="name" required value={this.state.name || ''} onChange={this.changeInput} onBlur={this.blurHandler}/>
                         {(!this.state.validateObject.name) && <span style={{color:'red'}}>{this.errorMessages.textInput}</span>}
                     </div>
                     <div>
                         <label>Count:</label>
-                        <input type="number" name="count" value={this.state.count || 0} onChange={this.changeCount} onBlur={this.blurHandler}/>
+                        <input type="number" name="count" value={this.state.count || 0} onChange={this.changeInput} onBlur={this.blurHandler}/>
                         {(!this.state.validateObject.count) && <span style={{color:'red'}}>{this.errorMessages.numberInput}</span>}
                     </div>
                     <div>
                         <label>Price:</label>
-                        <input type="number" name="price" value={this.state.price || 0} onChange={this.changePrice} onBlur={this.blurHandler}/>
+                        <input type="number" name="price" value={this.state.price || 0} onChange={this.changeInput} onBlur={this.blurHandler}/>
                         {(!this.state.validateObject.price) && <span style={{color:'red'}}>{this.errorMessages.numberInput}</span>}
                     </div>
                     <div>
                         <label>Url:</label>
-                        <input type="text" name="url" value={this.state.url || ''} onChange={this.changeUrl} onBlur={this.blurHandler}/>
+                        <input type="text" name="url" value={this.state.url || ''} onChange={this.changeInput} onBlur={this.blurHandler}/>
                         {(!this.state.validateObject.url) && <span style={{color:'red'}}>{this.errorMessages.textInput}</span>}
                     </div>
                 </form>
-                <input type="button" value={(this.props.mode === 'create') ? "Add": "Save"} onClick={this.saveProduct}/>
+                <input type="button" disabled={!this.validateAll()} value={(this.props.mode === 'create') ? "Add": "Save"} onClick={this.saveProduct}/>
                 <input type="button" value="Cancel" onClick={this.cancel}/>
             </div>
         )
