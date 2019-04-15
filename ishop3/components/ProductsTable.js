@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Product from './Product';
 import ProductCard from './ProductCard';
 import EditProductForm from './EditProductForm';
-require ('./ProductsTable.css');
+require('./ProductsTable.css');
 
 class ProductsTable extends React.Component {
   static propTypes = {
@@ -11,51 +11,54 @@ class ProductsTable extends React.Component {
     products: PropTypes.array
   };
   state = {
-    mode: null,
+    mode: null, // 'view', 'edit', 'create'
     selected: null,
     products: this.props.products.slice(),
-    isAvailable: true
-  }  
+    isAvailable: true // можо ли менять продукты
+  }
   clickProduct = (productId) => {
     this.setState(
-      { 
+      {
         mode: 'view',
         selected: productId
       });
   }
   editProduct = (productId) => {
     console.log(productId);
-    this.setState({ 
-        mode: 'edit',
-        selected: productId
-      }
+    this.setState({
+      mode: 'edit',
+      selected: productId
+    }
     );
   }
   saveProduct = (savingProduct) => {
-      if (!savingProduct.id) {
-        // находим максимальный id продуктов и увеличиваем на единицу
-        let newId = this.state.products.reduce((a, b) => (a.id > b.id ? a.id : b.id)) + 1;
-        savingProduct.id = newId;
-        this.setState((currState, props) => ({
-          mode: null,
-          selected: null,
-          products: [...currState.products, savingProduct]
-        }));
-      }
-      else {
-        this.setState((currState, props) => ({
-          mode: null,
-          selected: null,
-          products: currState.products.map(p => {
-            return (p.id !== savingProduct.id) ? p: savingProduct; 
-          })
-       }));
-      }       
+    if (!savingProduct.id) {
+      // находим максимальный id продуктов и увеличиваем на единицу
+      let newId = this.state.products.reduce((a, b) => (a.id > b.id ? a.id : b.id)) + 1;
+      savingProduct.id = newId;
+      this.setState((currState, props) => ({
+        mode: null,
+        selected: null,
+        isAvailable: true,
+        products: [...currState.products, savingProduct]
+      }));
+    }
+    else {
+      this.setState((currState, props) => ({
+        mode: null,
+        selected: null,
+        isAvailable: true,
+        products: currState.products.map(p => {
+          return (p.id !== savingProduct.id) ? p : savingProduct;
+        })
+      }));
+    }
   }
   createProduct = () => {
     this.setState({
       mode: 'create',
-      selected : 0
+      selected: 0,
+      isAvailable: false
     });
   }
   deleteProduct = (productId) => {
@@ -93,14 +96,14 @@ class ProductsTable extends React.Component {
         cbDelete={this.deleteProduct}
         cbEdit={this.editProduct}
       />);
-      let selectedProduct = {};
-      if (this.state.selected)
-        selectedProduct = this.state.products.find(p => p.id === this.state.selected);
+    let selectedProduct = {};
+    if (this.state.selected)
+      selectedProduct = this.state.products.find(p => p.id === this.state.selected);
     return (
+
       <div>
-      <div className='ProductsTable'>
         <h2>{this.props.storeName}</h2>
-        <table className='products'>
+        <table className='productsTable'>
           <thead>
             <tr>
               <th>#</th>
@@ -115,36 +118,35 @@ class ProductsTable extends React.Component {
             {productsInTable}
           </tbody>
         </table>
-      </div> 
-      <div className="NewProduct">
-          <div className="NewProductBtn"> 
-          {
-            (this.state.mode !== 'edit') &&
-            <input  type="button" value='New Product' onClick={this.createProduct}/>
-          }  
+        <div className="NewProduct">
+          <div className="NewProductBtn">
+            {
+              (this.state.mode !== 'edit' && this.state.mode !== 'create') &&
+              <input type="button" value='New Product' onClick={this.createProduct} />
+            }
           </div>
-      </div>
-      <div className="ViewCard">
-        {
-          (this.state.mode === 'view' && this.state.selected ) && 
-              <ProductCard
-                product={selectedProduct} 
-            />
-        }
-      </div>
-      <div key={this.state.selected} className="EditCard">
-      {
-          (this.state.mode === 'edit' || this.state.mode === 'create') &&
-          <EditProductForm
+        </div>
+        <div className="ViewCard">
+          {
+            (this.state.mode === 'view' && this.state.selected) &&
+            <ProductCard
               product={selectedProduct}
-              mode = {this.state.mode}
-              cbSave = {this.saveProduct}
-              cbCancel = {this.cancel}
-              cbChanged = {this.cardChanged}
-          />
-        }
+            />
+          }
+        </div>
+        <div key={this.state.selected} className="EditCard">
+          {
+            (this.state.mode === 'edit' || this.state.mode === 'create') &&
+            <EditProductForm
+              product={selectedProduct}
+              mode={this.state.mode}
+              cbSave={this.saveProduct}
+              cbCancel={this.cancel}
+              cbChanged={this.cardChanged}
+            />
+          }
+        </div>
       </div>
-      </div> 
     );
   }
 }

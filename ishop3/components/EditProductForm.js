@@ -33,7 +33,7 @@ class EditProductForm extends React.Component {
                 count: this.validateNumberInput(this.props.product.count),
                 price: this.validateNumberInput(this.props.product.price),
             },
-            isChanged: false
+            isChanged: false // менялась ли карточка
         }
     };
     validateTextInput = (text) => { return text && text.length > 1; }
@@ -89,7 +89,6 @@ class EditProductForm extends React.Component {
                                 "Add new Product"
                         }
                 </h2>
-                <form>
                     {
                         (this.props.product) &&
                         <div>
@@ -97,29 +96,30 @@ class EditProductForm extends React.Component {
                             <div>{this.props.product.id}</div>
                         </div> 
                     }
-                    <div>
+                    <div className="inputGroup">
                         <label>Name:</label>
                         <input type="text" name="name" required value={this.state.name || ''} onChange={this.changeInput} onBlur={this.blurHandler}/>
                         {(!this.state.validateObject.name) && <span style={{color:'red'}}>{this.errorMessages.textInput}</span>}
                     </div>
-                    <div>
+                    <div className="inputGroup">
                         <label>Count:</label>
                         <input type="number" name="count" value={this.state.count || 0} onChange={this.changeInput} onBlur={this.blurHandler}/>
                         {(!this.state.validateObject.count) && <span style={{color:'red'}}>{this.errorMessages.numberInput}</span>}
                     </div>
-                    <div>
+                    <div className="inputGroup">
                         <label>Price:</label>
                         <input type="number" name="price" value={this.state.price || 0} onChange={this.changeInput} onBlur={this.blurHandler}/>
                         {(!this.state.validateObject.price) && <span style={{color:'red'}}>{this.errorMessages.numberInput}</span>}
                     </div>
-                    <div>
+                    <div className="inputGroup">
                         <label>Url:</label>
                         <input type="text" name="url" value={this.state.url || ''} onChange={this.changeInput} onBlur={this.blurHandler}/>
                         {(!this.state.validateObject.url) && <span style={{color:'red'}}>{this.errorMessages.textInput}</span>}
                     </div>
-                </form>
-                <input type="button" disabled={!this.validateAll()} value={(this.props.mode === 'create') ? "Add": "Save"} onClick={this.saveProduct}/>
-                <input type="button" value="Cancel" onClick={this.cancel}/>
+                    <div className="buttonGroup">
+                        <input type="button" disabled={!this.validateAll()} value={(this.props.mode === 'create') ? "Add": "Save"} onClick={this.saveProduct}/>
+                        <input type="button" value="Cancel" onClick={this.cancel}/>
+                    </div>
             </div>
         )
     }

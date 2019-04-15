@@ -1,6 +1,6 @@
-td,  th, .products {
-    border-collapse: collapse; /*убираем пустые промежутки между ячейками*/
-    border: 1px solid grey; /*устанавливаем для таблицы внешнюю границу серого цвета толщиной 1px*/
+td,  th, .productsTable {
+    border-collapse: collapse;
+    border: 1px solid grey; 
 }
 .productImg {
     display: block;
@@ -23,7 +23,6 @@ td {
 .NewProduct, .EditCard, .ViewCard {
     margin-top: 20px;
 }
-.NewProductBtn {
-    margin-top: 20px;
-    float: left;
+.NewProduct {
+    text-align: left;
 }
