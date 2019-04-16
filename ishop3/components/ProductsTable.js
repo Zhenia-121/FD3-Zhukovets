@@ -52,6 +52,7 @@ class ProductsTable extends React.Component {
         mode: null,
         selected: null,
         canEdit: true,
+        canDelete: true,
         products: currState.products.map(p => {
           return (p.id !== savingProduct.id) ? p : savingProduct;
         })
@@ -62,7 +63,8 @@ class ProductsTable extends React.Component {
     this.setState({
       mode: 'create',
       selected: 0,
-      canEdit: false
+      canEdit: false,
+      canDelete: false
     });
   }
   deleteProduct = (productId) => {
