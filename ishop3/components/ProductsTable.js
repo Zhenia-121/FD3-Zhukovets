@@ -14,19 +14,22 @@ class ProductsTable extends React.Component {
     mode: null, // 'view', 'edit', 'create'
     selected: null,
     products: this.props.products.slice(),
-    isAvailable: true // можо ли менять продукты
+    canEdit: true, // можно ли менять продукты
+    canDelete: true // можно ли удалять продукты
   }
   clickProduct = (productId) => {
     this.setState(
       {
         mode: 'view',
-        selected: productId
+        selected: productId,
+        canDelete: true
       });
   }
   editProduct = (productId) => {
     console.log(productId);
     this.setState({
       mode: 'edit',
+      canDelete: false,
       selected: productId
     }
     );
@@ -39,7 +42,8 @@ class ProductsTable extends React.Component {
       this.setState((currState, props) => ({
         mode: null,
         selected: null,
-        isAvailable: true,
+        canEdit: true,
+        canDelete: true,
         products: [...currState.products, savingProduct]
       }));
     }
@@ -47,7 +51,7 @@ class ProductsTable extends React.Component {
       this.setState((currState, props) => ({
         mode: null,
         selected: null,
-        isAvailable: true,
+        canEdit: true,
         products: currState.products.map(p => {
           return (p.id !== savingProduct.id) ? p : savingProduct;
         })
@@ -58,7 +62,7 @@ class ProductsTable extends React.Component {
     this.setState({
       mode: 'create',
       selected: 0,
-      isAvailable: false
+      canEdit: false
     });
   }
   deleteProduct = (productId) => {
@@ -73,14 +77,16 @@ class ProductsTable extends React.Component {
   // запрещаем просмотр и изменение продуктов - в текущий момент продукт selected уже редактируется
   cardChanged = () => {
     this.setState({
-      isAvailable: false
+      canEdit: false,
+      canDelete: false
     });
   }
   cancel = () => {
     this.setState({
       mode: null,
       selected: null,
-      isAvailable: true
+      canEdit: true,
+      canDelete: true
     });
   }
   render() {
@@ -92,7 +98,8 @@ class ProductsTable extends React.Component {
         count={p.count}
         price={p.price}
         url={p.url}
-        canActions={this.state.isAvailable}
+        canEdit={this.state.canEdit}
+        canDelete={this.state.canDelete}
         selected={this.state.selected}
         cbClick={this.clickProduct}
         cbDelete={this.deleteProduct}

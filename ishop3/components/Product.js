@@ -9,7 +9,8 @@ class Product extends React.Component{
         price: PropTypes.number.isRequired,
         url: PropTypes.string.isRequired,
         count: PropTypes.number.isRequired,
-        canActions: PropTypes.bool.isRequired,
+        canEdit: PropTypes.bool.isRequired,
+        canDelete: PropTypes.bool.isRequired,
         selected: PropTypes.number,
         cbDelete: PropTypes.func.isRequired,
         cbClick: PropTypes.func.isRequired,
@@ -24,7 +25,7 @@ class Product extends React.Component{
         this.props.cbEdit(this.props.id);
     }
     selectProduct = () => {
-        if (this.props.canActions)
+        if (this.props.canEdit)
             this.props.cbClick(this.props.id);
     }
     render() {
@@ -41,8 +42,8 @@ class Product extends React.Component{
                         {this.props.url}
                     </td>
                     <td>
-                        <input type='button' disabled={!this.props.canActions} value='Edit' onClick={this.editProduct}/>
-                        <input type='button' disabled={!this.props.canActions} value='Delete' onClick={this.deleteProduct}/>
+                        <input type='button' disabled={!this.props.canEdit} value='Edit' onClick={this.editProduct}/>
+                        <input type='button' disabled={!this.props.canDelete} value='Delete' onClick={this.deleteProduct}/>
                     </td>
                 </tr>
             )
