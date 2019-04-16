@@ -64,7 +64,9 @@ class ProductsTable extends React.Component {
   deleteProduct = (productId) => {
     if (confirm('Are yo really want to delete this product')) {
       this.setState((currState, props) => ({
-        products: currState.products.filter(p => p.id != productId)
+        products: currState.products.filter(p => p.id != productId),
+        selected: 0,
+        mode: null
       }));
     }
   }
