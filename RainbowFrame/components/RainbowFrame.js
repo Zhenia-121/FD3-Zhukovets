@@ -15,8 +15,7 @@ class RainbowFrame extends React.Component {
     let stepWH = "10px";
     console.log(this.props.colors);
     this.props.colors.forEach(color => {
-      let newFrame = <div style={{border:"solid 8px "+color,margin:"10px",height:Height,width:Width}}>{frames}</div>
-      frames = newFrame;
+      frames = <div style={{border:"solid 8px "+color,margin:"10px",height:Height,width:Width}}>{frames}</div>
       Width += stepWH;
       Height += stepWH;
     });

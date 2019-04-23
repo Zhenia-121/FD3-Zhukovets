@@ -9,14 +9,17 @@ class BR2JSX extends React.Component {
   };
   
   render() {
-    let content = [];
     let strings = this.props.text.split(/<br>|<br\/>|<br\s\/>/gm);
-    strings.forEach((str, index) => {
-      content.push(str, <br key={index}/>);  
+    
+    strings = strings.map((item, index, array) => {
+      if (index !== array.length-1) 
+        return [item, <br key={index}/>];
+      else
+        return item;
     });
     return (
       <div className="br2jsx">
-        {content}
+        {strings}
       </div>
     );
   }
